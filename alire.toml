@@ -5,7 +5,7 @@ version = "0.1.0-dev"
 authors = ["nao"]
 maintainers = ["nao <naolos-regen@proton.me>"]
 maintainers-logins = ["naolos-regen"]
-licenses = "None"
+licenses = "Apache-2.0 WITH LLVM-exception"
 website = ""
 tags = []
 

@@ -1,4 +1,3 @@
-with Reading_File;
 with Ada.Text_IO; 		use Ada.Text_IO;
 with Ada.Strings.Unbounded; 	use Ada.Strings.Unbounded;
 with Ada.Text_IO.Unbounded_IO;
@@ -12,18 +11,17 @@ package body Reading_File is
 	use Integer_Vectors;
 	
 	type Digit_Name is (One, Two, Three, Four, Five, Six, Seven, Eight, Nine);
-	
-	subtype Digit_Char is Character range '0' .. '9';
+	-- subtype Digit_Char is Character range '0' .. '9';
 	Digit_Strings: constant array(Digit_Name) of String_Access := (
-		new String'("one"),
-		new String'("two"),
-		new String'("three"),
-		new String'("four"),
-		new String'("five"),
-		new String'("six"),
-		new String'("seven"),
-		new String'("eight"),
-		new String'("nine")
+		One 	=> new String'("one"),
+		Two	=> new String'("two"),
+		Three	=> new String'("three"),
+		Four	=> new String'("four"),
+		Five	=> new String'("five"),
+		Six	=> new String'("six"),
+		Seven	=> new String'("seven"),
+		Eight	=> new String'("eight"),
+		Nine	=> new String'("nine")
 	);
         Digit_Values: constant array(Digit_Name) of Integer := (1, 2, 3, 4, 5, 6, 7, 8, 9);
 
@@ -36,7 +34,7 @@ package body Reading_File is
 		for Char of Line loop
 			if Char >= '0' and then Char <= '9' then
 				declare
-					Digit: Integer := Character'Pos(Char) - Character'Pos('0');
+					Digit: constant Integer := Character'Pos(Char) - Character'Pos('0');
 				begin
 					if not First_Found then
 						First_Digit := Digit;
@@ -145,6 +143,7 @@ package body Reading_File is
 			Sum := Sum + Val;
 		end loop;
 		Put_Line("Part 2: " & Integer'Image(Sum));
+
 	end Read_File;
 
 
