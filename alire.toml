@@ -1,0 +1,13 @@
+name = "advent_of_code"
+description = "solutions of advent of code"
+version = "0.1.0-dev"
+
+authors = ["nao"]
+maintainers = ["nao <naolos-regen@proton.me>"]
+maintainers-logins = ["naolos-regen"]
+licenses = "None"
+website = ""
+tags = []
+
+executables = ["advent_of_code"]
+
