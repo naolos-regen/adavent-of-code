@@ -3,7 +3,7 @@ with Ada.Strings.Unbounded; 	use Ada.Strings.Unbounded;
 with Ada.Text_IO.Unbounded_IO;
 with Ada.Containers.Vectors;
 
-package body Reading_File is
+package body Day_01 is
 	
 	package Integer_Vectors is new Ada.Containers.Vectors
 		(Index_Type => Positive,
@@ -104,7 +104,7 @@ package body Reading_File is
 			return Result;
 	end Get_Result_From_Line_Part_Two;
 
-	procedure Read_File(File_Path : String) is
+	procedure Solve(File_Path : String) is
 		use Ada.Text_IO.Unbounded_IO;
 		File			: File_Type;
 		Line			: Unbounded_String;
@@ -144,7 +144,6 @@ package body Reading_File is
 		end loop;
 		Put_Line("Part 2: " & Integer'Image(Sum));
 
-	end Read_File;
+	end Solve;
 
-
-end Reading_File;
+end Day_01;

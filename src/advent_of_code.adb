@@ -1,6 +1,6 @@
-with Reading_File; use Reading_File;
+with Solutions_Each;
 
 procedure Advent_Of_Code is
 begin
-	Read_File("tasks/2023/DAY01/input.txt");
+	Solutions_Each.Year_Two_Three;
 end Advent_Of_Code;
