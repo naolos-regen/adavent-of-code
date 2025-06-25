@@ -1,3 +1,3 @@
 package Day_02 is 
-	procedure Solve;
+	procedure Solve(File_Path: String);
 end Day_02;
