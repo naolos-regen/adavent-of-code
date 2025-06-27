@@ -153,8 +153,8 @@ package body Day_02 is
 				Validate_Game_Part_Two(CX_PT_TWO, Game);
 			end;
 		end loop;
-		Put_Line("Part 1 Day 02: " & CX_PT_ONE'Image);
-		Put_Line("Part 2 Day 02: " & CX_PT_TWO'Image);
+		Put_Line("Part 1: " & CX_PT_ONE'Image);
+		Put_Line("Part 2: " & CX_PT_TWO'Image);
 		Close(File);
 	end Solve;
 end Day_02;
