@@ -6,7 +6,7 @@ with Ada.Containers.Vectors;
 package body Day_01 is
 	
 	package Integer_Vectors is new Ada.Containers.Vectors
-		(Index_Type => Positive,
+		(Index_Type   => Positive,
 		 Element_Type => Integer);
 	use Integer_Vectors;
 	
