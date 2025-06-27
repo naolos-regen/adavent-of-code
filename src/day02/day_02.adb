@@ -1,64 +1,67 @@
 with Ada.Text_IO; 		use Ada.Text_IO;
+with GNAT.String_Split;		use GNAT;
+with Ada.Characters.Latin_1;	use Ada.Characters;
 
 package body Day_02 is
 
-	type Cubes 	is (Red, Blue, Green);
-
-	subtype Red_Cube_Count		is Integer range 0 .. 12; -- Red   : Max := 12
-	subtype Blue_Cube_Count		is Integer range 0 .. 14; -- Blue  : Max := 14
-	subtype Green_Cube_Count	is Integer range 0 .. 13; -- Green : Max := 13
-
-	function Cube_Image(C: Cubes) return String is
+	-- Should be the last Function to solve the issue
+	function Is_Gamable(Number : String; Cube : String) return Boolean is
 	begin
-		case C is 
-			when Red   => return "red"  ;
-			when Blue  => return "blue" ;
-			when Green => return "green";
-		end case;
-	end Cube_Image;
-	
-	type Red_Cube is record
-		Cube : Cubes := Red;
-		Count: Red_Cube_Count;
-	end record;
-
-	type Green_Cube is record
-		Cube : Cubes := Green;
-		Count: Green_Cube_Count;
-	end record;
-
-	type Blue_Cube is record
-		Cube : Cubes := Blue;
-		Count: Blue_Cube_Count;
-	end record;
-
-	type Cube_Set	is record
-		Red	: Red_Cube;
-		Blue	: Blue_Cube;
-		Green	: Green_Cube;
-	end record;
-
-
-	-- Validate if Game is Valid Game
-	--
-	-- Split String for ':' ',' & ';' 
-	-- ':' Comes after Game N indicating Game.
-	-- ',' Seperates each Cube, Red, Green & Blue, respectively.
-	-- ';' Indicates end of each set within a game.
-	--
-	-- A Set may or may not have Cube_Set.
-	--
-	-- Return is Boolean, to prove if game is gamable :-D
-	-- if sone Set of the game, has a cube that is out of bounds
-	-- (corresponding to Color_Cube_Count) than game is not gamable
-	function Parse_Line(Game: String) return Boolean is
-	begin
-		for I of Game loop
-			Put_Line(I'Image);
-		end loop;
 		return False;
-	end Parse_Line;
+	end Is_Gamable;
 
+	function Evaluate_Cube(Cube_Sub : String) return Boolean is
+		Subs		: GNAT.String_Split.Slice_Set;
+		Seperator	: constant String	:= " " & Latin_1.HT;
+		Boolean_Result	: Boolean		:= False;
+	begin
+		String_Split.Create (Subs, Cube_Sub, Seperator, String_Split.Multiple);
+		declare
+			Number	: constant String	:= String_Split.Slice(Subs, 1);
+			Cube	: constant String	:= String_Split.Slice(Subs, 2);
+		begin
+			Boolean_Result := Is_Gamable(Number, Cube);
+		end;
+		return Boolean_Result;
+	end Evaluate_Cube;
+
+	function Validate_Set(Sub : String) return Boolean is 
+		Cube_Subs	: GNAT.String_Split.Slice_Set;
+		Cube_Seperator	: constant String 	:= "," & Latin_1.HT;
+		Boolean_Result	: Boolean		:= False;
+	begin
+		String_Split.Create (Cube_Subs, Sub, Cube_Seperator, String_Split.Multiple);
+		for I in 1 .. String_Split.Slice_Count (Cube_Subs) loop
+			declare
+				Cube_Sub : constant String := String_Split.Slice(Cube_Subs, I);
+			begin
+				Boolean_Result := Evaluate_Cube(Cube_Sub);
+			end;
+		end loop;
+		return Boolean_Result;
+	end Validate_Set;
+
+	function Validate_Game(Game: String) return Boolean is
+		Game_Subs	: GNAT.String_Split.Slice_Set;
+		Game_Seperator	: constant String 	:= ":" & Latin_1.HT;
+		Boolean_Result	: Boolean 		:= False;
+		Set_Seperator	: constant String 	:= ";" & Latin_1.HT;
+	begin
+		String_Split.Create (Game_Subs, Game, Game_Seperator, String_Split.Multiple);
+		declare
+			Sub	: constant String := String_Split.Slice(Game_Subs, 2);
+		begin
+			String_Split.Create (Game_Subs, Sub, Set_Seperator, String_Split.Multiple);
+			for I in 1 .. String_Split.Slice_Count (Game_Subs) loop
+				declare 
+					Set_Sub	: constant String := String_Split.Slice(Game_Subs, I);
+				begin
+					Boolean_Result := Validate_Set(Set_Sub);
+				end;
+			end loop;
+		end;
+		return Boolean_Result;
+	end Validate_Game;
 
 	procedure Solve(File_Path: String) is
 		File	: File_Type;
@@ -70,11 +73,12 @@ package body Day_02 is
 				Game : constant  String := Get_Line(File);
 			begin
 				-- Put_Line(Game);
-				if Parse_Line(Game) = True then 
+				if Validate_Game(Game) = True then 
 					CX := CX + 1;
 				end if;
 			end;
 		end loop;
+		Put_Line(CX'Image);
 		Close(File);
 	end Solve;
 end Day_02;
