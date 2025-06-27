@@ -8,7 +8,7 @@ package body Day_02 is
 	-- I : Integer := Integer'Value (To_String (T));
 	function Is_Gamable(Number : String; Cube : String) return Boolean is
 		Is_Gamable	: Boolean := True;
-		Cube_Number	: Integer := Integer'Value (Number);
+		Cube_Number	: constant Integer := Integer'Value (Number);
 	begin
 		if Cube = "red" then
 			if Cube_Number not in 0 .. 12 then
@@ -46,40 +46,46 @@ package body Day_02 is
 	function Validate_Set(Sub : String) return Boolean is 
 		Cube_Subs	: GNAT.String_Split.Slice_Set;
 		Cube_Seperator	: constant String 	:= "," & Latin_1.HT;
-		Boolean_Result	: Boolean		:= False;
+		Boolean_Result	: Boolean		:= True;
 	begin
-		Put_Line("Validating: " & Sub);
 		String_Split.Create (Cube_Subs, Sub, Cube_Seperator, String_Split.Multiple);
 		for I in 1 .. String_Split.Slice_Count (Cube_Subs) loop
 			declare
 				Cube_Sub : constant String := String_Split.Slice(Cube_Subs, I);
 			begin
-				Boolean_Result := Evaluate_Cube(Cube_Sub);
+				Boolean_Result := Boolean_Result and Evaluate_Cube(Cube_Sub);
 			end;
 		end loop;
 		return Boolean_Result;
 	end Validate_Set;
 
-	function Validate_Game(Game: String) return Boolean is
+	procedure Validate_Game(CX : in out Integer ; Game: String) is
 		Game_Subs	: GNAT.String_Split.Slice_Set;
+		Game_Number	: Integer		:= 0;
 		Game_Seperator	: constant String 	:= ":" & Latin_1.HT;
-		Boolean_Result	: Boolean 		:= False;
+		Boolean_Result	: Boolean 		:= True;
 		Set_Seperator	: constant String 	:= ";" & Latin_1.HT;
+		
 	begin
 		String_Split.Create (Game_Subs, Game, Game_Seperator, String_Split.Multiple);
 		declare
 			Sub	: constant String := String_Split.Slice(Game_Subs, 2);
+			Game_Sub: constant String := String_Split.Slice(Game_Subs, 1);
 		begin
+			String_Split.Create (Game_Subs, Game_Sub, " ", String_Split.Multiple);
+			Game_Number := Integer'Value (String_Split.Slice (Game_Subs, 2));
 			String_Split.Create (Game_Subs, Sub, Set_Seperator, String_Split.Multiple);
 			for I in 1 .. String_Split.Slice_Count (Game_Subs) loop
 				declare 
 					Set_Sub	: constant String := String_Split.Slice(Game_Subs, I);
 				begin
-					Boolean_Result := Validate_Set(Set_Sub);
+					Boolean_Result := Boolean_Result and Validate_Set(Set_Sub);
 				end;
 			end loop;
 		end;
-		return Boolean_Result;
+		if Boolean_Result then
+			CX := CX + Game_Number;
+		end if;
 	end Validate_Game;
 
 	procedure Solve(File_Path: String) is
@@ -92,12 +98,10 @@ package body Day_02 is
 				Game : constant  String := Get_Line(File);
 			begin
 				-- Put_Line(Game);
-				if Validate_Game(Game) = True then 
-					CX := CX + 1;
-				end if;
+				Validate_Game(CX, Game);
 			end;
 		end loop;
-		Put_Line(CX'Image);
+		Put_Line("Part 1 Day 02: " & CX'Image);
 		Close(File);
 	end Solve;
 end Day_02;
