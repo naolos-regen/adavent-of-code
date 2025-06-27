@@ -5,9 +5,27 @@ with Ada.Characters.Latin_1;	use Ada.Characters;
 package body Day_02 is
 
 	-- Should be the last Function to solve the issue
+	-- I : Integer := Integer'Value (To_String (T));
 	function Is_Gamable(Number : String; Cube : String) return Boolean is
+		Is_Gamable	: Boolean := True;
+		Cube_Number	: Integer := Integer'Value (Number);
 	begin
-		return False;
+		if Cube = "red" then
+			if Cube_Number not in 0 .. 12 then
+				Is_Gamable := False;
+			end if;
+		end if;
+		if Cube = "blue" then
+			if Cube_Number not in 0 .. 14 then
+				Is_Gamable := False;
+			end if;
+		end if;
+		if Cube = "green" then
+			if Cube_Number not in 0 .. 13 then
+				Is_Gamable := False;
+			end if;
+		end if;
+		return Is_Gamable;
 	end Is_Gamable;
 
 	function Evaluate_Cube(Cube_Sub : String) return Boolean is
@@ -16,11 +34,11 @@ package body Day_02 is
 		Boolean_Result	: Boolean		:= False;
 	begin
 		String_Split.Create (Subs, Cube_Sub, Seperator, String_Split.Multiple);
-		declare
-			Number	: constant String	:= String_Split.Slice(Subs, 1);
-			Cube	: constant String	:= String_Split.Slice(Subs, 2);
+		declare 
+			Count_Sub 	: constant String := String_Split.Slice (Subs, 2);
+			Cube_Sub	: constant String := String_Split.Slice (Subs, 3);
 		begin
-			Boolean_Result := Is_Gamable(Number, Cube);
+			Boolean_Result := Is_Gamable(Count_Sub, Cube_Sub);
 		end;
 		return Boolean_Result;
 	end Evaluate_Cube;
@@ -30,6 +48,7 @@ package body Day_02 is
 		Cube_Seperator	: constant String 	:= "," & Latin_1.HT;
 		Boolean_Result	: Boolean		:= False;
 	begin
+		Put_Line("Validating: " & Sub);
 		String_Split.Create (Cube_Subs, Sub, Cube_Seperator, String_Split.Multiple);
 		for I in 1 .. String_Split.Slice_Count (Cube_Subs) loop
 			declare
