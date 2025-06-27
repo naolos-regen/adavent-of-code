@@ -42,7 +42,7 @@ package body Day_02 is
 		end;
 		return Boolean_Result;
 	end Evaluate_Cube;
-
+ 
 	function Validate_Set(Sub : String) return Boolean is 
 		Cube_Subs	: GNAT.String_Split.Slice_Set;
 		Cube_Seperator	: constant String 	:= "," & Latin_1.HT;
@@ -59,7 +59,7 @@ package body Day_02 is
 		return Boolean_Result;
 	end Validate_Set;
 
-	procedure Validate_Game(CX : in out Integer ; Game: String) is
+	procedure Validate_Game_Part_One(CX : in out Integer ; Game: String) is
 		Game_Subs	: GNAT.String_Split.Slice_Set;
 		Game_Number	: Integer		:= 0;
 		Game_Seperator	: constant String 	:= ":" & Latin_1.HT;
@@ -86,22 +86,75 @@ package body Day_02 is
 		if Boolean_Result then
 			CX := CX + Game_Number;
 		end if;
-	end Validate_Game;
+	end Validate_Game_Part_One;
+
+	procedure Validate_Game_Part_Two(CX : in out Integer; Game: String) is 
+		Game_Subs	: GNAT.String_Split.Slice_Set;
+		Set_Subs	: GNAT.String_Split.Slice_Set;
+		Cube_Subs	: GNAT.String_Split.Slice_Set;
+		Game_Seperator	: constant String	:= ":" & Latin_1.HT;
+		Set_Seperator	: constant String	:= ";" & Latin_1.HT;
+		Cube_Seperator	: constant String	:= "," & Latin_1.HT;
+		Red_Max		: Integer		:= 0;
+		Blue_Max	: Integer		:= 0;
+		Green_Max	: Integer		:= 0;
+		Game_ID		: Integer		:= 0;
+	begin
+		String_Split.Create (Game_Subs, Game, Game_Seperator, String_Split.Multiple);
+		declare 
+			Game_Sub	: constant String := String_Split.Slice(Game_Subs, 1);
+			Sub		: constant String := String_Split.Slice(Game_Subs, 2);
+		begin
+			String_Split.Create (Game_Subs, Game_Sub, " ", String_Split.Multiple);
+			Game_ID	:= Integer'Value (String_Split.Slice(Game_Subs, 2));
+			String_Split.Create (Game_Subs, Sub, Set_Seperator, String_Split.Multiple);
+
+			for I in 1 .. String_Split.Slice_Count (Game_Subs) loop
+				String_Split.Create (Set_Subs, String_Split.Slice(Game_Subs, I), Cube_Seperator, String_Split.Multiple);
+				for J in 1 .. String_Split.Slice_Count (Set_Subs) loop
+					String_Split.Create (Cube_Subs, String_Split.Slice(Set_Subs, J), " ", String_Split.Multiple);
+					declare
+						Cube_Count 	: constant String  := String_Split.Slice(Cube_Subs, 2);
+						Cube_Number	: constant Integer := Integer'Value (Cube_Count);
+						Cube_Name	: constant String  := String_Split.Slice(Cube_Subs, 3);
+					begin
+						if Cube_Name = "red" then
+							if Cube_Number > Red_Max then
+								Red_Max := Cube_Number;
+							end if;
+						elsif Cube_Name = "blue" then
+							if Cube_Number > Blue_Max then
+								Blue_Max := Cube_Number;
+							end if;
+						elsif Cube_Name = "green" then
+							if Cube_Number > Green_Max then
+								Green_Max := Cube_Number;
+							end if;
+						end if;
+					end;
+				end loop;
+			end loop;
+			Game_ID := Red_Max * Blue_Max * Green_Max;
+			CX	:= CX + Game_ID;
+		end;
+	end Validate_Game_Part_Two;
 
 	procedure Solve(File_Path: String) is
-		File	: File_Type;
-		CX	: Integer := 0;
+		File		: File_Type;
+		CX_PT_ONE	: Integer 	:= 0;
+		CX_PT_TWO	: Integer	:= 0;
 	begin
 		Open(File => File, Mode => In_File, Name => File_Path);
 		while not End_Of_File (File) loop
 			declare
 				Game : constant  String := Get_Line(File);
 			begin
-				-- Put_Line(Game);
-				Validate_Game(CX, Game);
+				Validate_Game_Part_One(CX_PT_ONE, Game);
+				Validate_Game_Part_Two(CX_PT_TWO, Game);
 			end;
 		end loop;
-		Put_Line("Part 1 Day 02: " & CX'Image);
+		Put_Line("Part 1 Day 02: " & CX_PT_ONE'Image);
+		Put_Line("Part 2 Day 02: " & CX_PT_TWO'Image);
 		Close(File);
 	end Solve;
 end Day_02;
