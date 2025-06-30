@@ -65,7 +65,6 @@ package body Day_02 is
 		Game_Seperator	: constant String 	:= ":" & Latin_1.HT;
 		Boolean_Result	: Boolean 		:= True;
 		Set_Seperator	: constant String 	:= ";" & Latin_1.HT;
-		
 	begin
 		String_Split.Create (Game_Subs, Game, Game_Seperator, String_Split.Multiple);
 		declare

@@ -4,26 +4,61 @@ with Ada.Characters.Latin_1;	use Ada.Characters;
 
 package body Day_04 is
 	
-	procedure Search_Part_One(Score : in out Integer; Left : Stirng, Right : Stirng) is
+	procedure Search_Part_One(Score : in out Integer; Left, Right : String) is
+		Left_Subs	: GNAT.String_Split.Slice_Set;
+		Right_Subs	: GNAT.String_Split.Slice_Set;
+		Seperator	: constant String := " " & Latin_1.HT;
 	begin
-		null;
+		String_Split.Create(Left_Subs,  Left,  Seperator, String_Split.Multiple);
+		String_Split.Create(Right_Subs, Right, Seperator, String_Split.Multiple);
+		for I in 1 .. String_Split.Slice_Count (Left_Subs) loop
+			declare
+				cmp : constant String := String_Split.Slice (Left_Subs, I);
+				Left_Cmp : Integer := 0;
+			begin
+				if cmp /= "" then
+					Left_Cmp := Integer'Value (cmp);
+					for J in 1 .. String_Split.Slice_Count (Right_Subs) loop
+						declare
+							r_cmp			: constant String := String_Split.Slice (Right_Subs, J);
+							Right_Cmp	: Integer;
+						begin
+							if r_cmp /= "" then
+								Right_Cmp := Integer'Value (r_cmp);
+								if Left_Cmp = Right_Cmp then
+									Score := Score + 1;
+								end if;
+							end if;
+						end;
+					end loop;
+				end if;
+			end;
+		end loop;
+
 	end Search_Part_One;
 
 	procedure Validate_Game_Part_One(CX : in out Integer; Game : String) is
 		Subs					: GNAT.String_Split.Slice_Set;
-		Game_Seperator		: constant Stirng := ":" & Latin_1.HT;
-		Number_Seperator	: constant Stirng := " " & Latin_1.HT;
+		Game_Seperator		: constant String := ":" & Latin_1.HT;
+		Number_Seperator	: constant String := " " & Latin_1.HT;
 		Table_Seperator	: constant String := "|" & Latin_1.HT;
 		Game_Number			: Integer			:= 0;
 		Score			: Integer			:= 0;
-	begin
-		String_Split.Create(Subs, Game, Number_Seperator, String_Split.Multiple);
-		Integer := Integer'Value (String_Split.Slice (Subs, 2));
-		String_Split.Create(Subs, Game, Game_Seperator, Stirng_Split.Multiple);
+	begin 
+		-- FROM HERE THIS PART CAN BE IGNORED
+		String_Split.Create(Subs, Game, Game_Seperator, String_Split.Multiple);
 		declare
-			Sub	: constant Stirng = String_Split.Slice (Subs, 2));
+			Card	: constant String := String_Split.Slice (Subs, 1);
 		begin
-			String_Split.Create(Subs, Sub, Table_Seperator, Stirng_Split.Multiple);
+			String_Split.Create(Subs, Card, Number_Seperator, String_Split.Multiple);
+			Game_Number := Integer'Value (String_Split.Slice(Subs, 2));
+		end;
+		-- TILL HERE THIS PART CAN BE IGNORED
+		String_Split.Create(Subs, Game, Game_Seperator, String_Split.Multiple);
+		declare
+			Sub	: constant String := String_Split.Slice (Subs, 2);
+		begin
+			String_Split.Create(Subs, Sub, Table_Seperator, String_Split.Multiple);
 			declare
 				Left	: constant String := String_Split.Slice (Subs, 1);
 				Right	: constant String := String_Split.Slice (Subs, 2);
@@ -31,8 +66,10 @@ package body Day_04 is
 				Search_Part_One(Score, Left, Right);
 			end;
 		end;
-
-		end;
+		if Score > 2 then
+			Score := Score * 2;
+		end if;
+		CX	:= CX	+ Score;
 	end Validate_Game_Part_One;
 
 	procedure Solve(File_Path : String) is
