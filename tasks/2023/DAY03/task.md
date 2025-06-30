@@ -27,7 +27,7 @@
 
    Here is an example engine schematic:
 
-   467..114..
+467..114..
 ...*......
 ..35..633.
 ......#...
