@@ -24,20 +24,41 @@ package body Day_04_P_2 is
 		return This;
 	end Default_Card_Type;
 
+	-- INFO: Automatically is Integer?
 	type Cards_Lines is array (1 .. 196) of Card_Type;
 
-	procedure Combine_Left(Line : String, Numbers: in out Left_Array) is
-		Subs : String_Split.Slice_Set;
+	procedure Combine_Left(Line : String; Numbers: in out Left_Array) is
+		Subs		 : String_Split.Slice_Set;
+		Int_Index : Positive := 1;
 	begin
 		String_Split.Create(Subs, Line, " ", String_Split.Multiple);
-		-- TODO: problem when indexing String_Split :'(
+		for I in String_Split.Slice_Count (Subs) loop
+			declare
+				cmb : constant String := String_Split.Slice (Subs, Int_Index);
+			begin
+				if cmb /= "" then
+					Numbers(Int_Index) := Integer'Value (cmb);
+				end if; -- Something like that?
+			end;
+			Int_Index := Int_Index + 1;
+		end loop;
 	end Combine_Left;
 
 	procedure Combine_Right(Line : String, Numbers: in out Right_Array) is
-		Subs : String_Split.Slice_Set;
+		Subs		 : String_Split.Slice_Set;
+		Int_Index : Positive := 1;
 	begin
 		String_Split.Create(Subs, Line, " ", String_Split.Multiple);
-		-- TODO: problem when indexing String_Split :-(
+		for I in String_Split.Slice_Count (Subs) loop
+			declare
+				cmb : constant String := String_Split.Slice (Subs, Int_Index);
+			begin
+				if cmb /= "" then
+					Numbers(Int_Index) := Integer'Value (cmb);
+				end if; -- Something like that?
+			end;
+			Int_Index := Int_Index + 1;
+		end loop;
 	end Combine_Right;
 
 	procedure Parse(Cards: in out Card_Lines; Card : String) 
