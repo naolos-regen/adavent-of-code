@@ -66,10 +66,9 @@ package body Day_04 is
 				Search_Part_One(Score, Left, Right);
 			end;
 		end;
-		if Score > 2 then
-			Score := Score * 2;
+		if Score > 0 then
+		  CX	:= CX	+ (2 ** (Score));
 		end if;
-		CX	:= CX	+ Score;
 	end Validate_Game_Part_One;
 
 	procedure Solve(File_Path : String) is
