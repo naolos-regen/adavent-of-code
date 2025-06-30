@@ -34,26 +34,14 @@ package body Day_04 is
 				end if;
 			end;
 		end loop;
-
 	end Search_Part_One;
 
 	procedure Validate_Game_Part_One(CX : in out Integer; Game : String) is
 		Subs					: GNAT.String_Split.Slice_Set;
 		Game_Seperator		: constant String := ":" & Latin_1.HT;
-		Number_Seperator	: constant String := " " & Latin_1.HT;
 		Table_Seperator	: constant String := "|" & Latin_1.HT;
-		Game_Number			: Integer			:= 0;
 		Score			: Integer			:= 0;
 	begin 
-		-- FROM HERE THIS PART CAN BE IGNORED
-		String_Split.Create(Subs, Game, Game_Seperator, String_Split.Multiple);
-		declare
-			Card	: constant String := String_Split.Slice (Subs, 1);
-		begin
-			String_Split.Create(Subs, Card, Number_Seperator, String_Split.Multiple);
-			Game_Number := Integer'Value (String_Split.Slice(Subs, 2));
-		end;
-		-- TILL HERE THIS PART CAN BE IGNORED
 		String_Split.Create(Subs, Game, Game_Seperator, String_Split.Multiple);
 		declare
 			Sub	: constant String := String_Split.Slice (Subs, 2);
@@ -67,9 +55,10 @@ package body Day_04 is
 			end;
 		end;
 		if Score > 0 then
-		  CX	:= CX	+ (2 ** (Score - 1));
+			CX	:= CX	+ (2 ** (Score - 1));
 		end if;
 	end Validate_Game_Part_One;
+
 
 	procedure Solve(File_Path : String) is
 		File			: File_Type;
@@ -84,5 +73,6 @@ package body Day_04 is
 			end;
 		end loop;
 		Put_Line("Part 1: " & CX_PT_ONE'Image);
+		Close(File);
 	end Solve;
 end Day_04;
