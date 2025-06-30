@@ -3,7 +3,7 @@ with GNAT.String_Split;			use GNAT;
 with Ada.Characters.Latin_1;	use Ada.Characters;
 
 package body Day_04 is
-	
+
 	procedure Search_Part_One(Score : in out Integer; Left, Right : String) is
 		Left_Subs	: GNAT.String_Split.Slice_Set;
 		Right_Subs	: GNAT.String_Split.Slice_Set;
@@ -67,7 +67,7 @@ package body Day_04 is
 			end;
 		end;
 		if Score > 0 then
-		  CX	:= CX	+ (2 ** (Score));
+		  CX	:= CX	+ (2 ** (Score - 1));
 		end if;
 	end Validate_Game_Part_One;
 
