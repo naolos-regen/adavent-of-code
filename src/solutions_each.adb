@@ -3,7 +3,6 @@ with Day_01;
 with Day_02;
 with Day_03;
 with Day_04;
-with Day_04_P_2;
 
 package body Solutions_Each is
 	procedure Year_Two_Three is
@@ -16,6 +15,5 @@ package body Solutions_Each is
 		Day_03.Solve("tasks/2023/DAY03/input.txt");
 		Put_Line("Day 04");
 		Day_04.Solve("tasks/2023/DAY04/input.txt");
-		Day_04_P_2.Solve("tasks/2023/DAY04/input.txt");
 	end Year_Two_Three;
 end Solutions_Each;
