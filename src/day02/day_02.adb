@@ -3,7 +3,6 @@ with GNAT.String_Split;		use GNAT;
 with Ada.Characters.Latin_1;	use Ada.Characters;
 
 package body Day_02 is
-
 	-- Should be the last Function to solve the issue
 	-- I : Integer := Integer'Value (To_String (T));
 	function Is_Gamable(Number : String; Cube : String) return Boolean is
