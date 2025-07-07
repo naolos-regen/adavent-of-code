@@ -1,5 +1,4 @@
 with Ada.Wide_Text_IO;					use Ada.Wide_Text_IO;
-with Ada.Characters.Latin_1;	use Ada.Characters.Latin_1;
 
 package body Ascii_Art is
 	
