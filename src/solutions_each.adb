@@ -1,19 +1,33 @@
 with Ada.Text_IO;	use Ada.Text_IO;
+with Ascii_Art;
 with Day_01;
 with Day_02;
 with Day_03;
 with Day_04;
 
 package body Solutions_Each is
+
+	ESC	: constant Character := Character'Val(27);
+
+	Red		: constant String		:= ESC & "[31m";
+	Green		: constant String		:= ESC & "[32m";
+	Yellow	: constant String		:= ESC & "[33m";
+	-- Blue		: constant String		:= ESC & "[34m";
+	-- Magenta	: constant String		:= ESC & "[35m";
+	Cyan		: constant String		:= ESC & "[36m";
+	Reset		: constant String		:= ESC & "[0m";
+
+
 	procedure Year_Two_Three is
 	begin
-		Put_Line("Day 01");
+		Ascii_Art.Put_Ascii_Art;
+		Put_Line(Green & "Day 01" & Reset);
 		Day_01.Solve("tasks/2023/DAY01/input.txt");
-		Put_Line("Day 02");
+		Put_Line(Yellow & "Day 02" & Reset);
 		Day_02.Solve("tasks/2023/DAY02/input.txt");
-		Put_Line("Day 03");
+		Put_Line(Cyan & "Day 03" & Reset);
 		Day_03.Solve("tasks/2023/DAY03/input.txt");
-		Put_Line("Day 04");
+		Put_Line(Red & "Day 04" & Reset);
 		Day_04.Solve("tasks/2023/DAY04/input.txt");
 	end Year_Two_Three;
 end Solutions_Each;

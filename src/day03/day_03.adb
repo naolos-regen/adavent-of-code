@@ -113,31 +113,38 @@ package body Day_03 is
 						Start_C	: Integer := C;
 						End_C		: Integer := C;
 						Value		: Integer := 0;
+						
+						procedure Insert_If_New(V: Integer) is
+							Exists : Boolean := False;
+						begin
+							for I in 1 .. Count loop
+								if Found(I) = V then
+									Exists := True;
+									exit;
+								end if;
+							end loop;
+							
+							if not Exists then
+								Count := Count + 1;
+								if Count <= Found'Length then
+									Found(Count) := V;
+								end if;
+							end if;
+						end Insert_If_New;
 					begin
 						while Start_C > Arr'First(1) and then Arr(Start_C - 1, R).Typ = Number loop
 							Start_C := Start_C - 1;
 						end loop;
+						
 						while End_C < Arr'Last(1) and then Arr(End_C + 1, R).Typ = Number loop
 							End_C := End_C + 1;
 						end loop;
 
-						if not (C > Start_C and C < End_C) then
-							for I in 1 .. Count loop
-								if Found(I) = Start_C * 1000 + R then
-									goto Skip;
-								end if;
-							end loop;
-
-							for I in Start_C .. End_C loop
-								Value := Value * 10 + Character'Pos(Arr(I, R).Char) - Character'Pos('0');
-							end loop;
-
-							Count := Count + 1;
-							if Count <= 8 then
-								Found(Count) := Value;
-							end if;
-						end if;
-						<<Skip>>
+						for I in Start_C .. End_C loop
+							Value := Value * 10 + Character'Pos(Arr(I, R).Char) - Character'Pos('0');
+						end loop;
+					
+						Insert_If_New(Value);
 					end;
 				end if;
 			end loop;
@@ -193,8 +200,10 @@ package body Day_03 is
 			end;
 		end loop;
 		Lookout(Arr);
+		
 		Put_Line("Part 1: " & Integer'Image(Sum_Part_Numbers(Arr)));
 		Put_Line("Part 2: " & Integer'Image(Sum_Part_Two(Arr)));
+
 		Close (File);
 	end Solve;
 end Day_03;
